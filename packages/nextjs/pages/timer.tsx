@@ -38,14 +38,6 @@ const ExampleUI: NextPage = () => {
     }
   };
 
-  const handleAddTenSeconds = () => {
-    if (countdown === 0) {
-      setCountdown(10);
-    } else {
-      setCountdown(prevCountdown => prevCountdown + 10);
-    }
-  };
-
   const { writeAsync: endTimer, isLoading: isEnding } = useScaffoldContractWrite({
     contractName: "Web3Pomodoro",
     functionName: "endTimer",
@@ -79,15 +71,6 @@ const ExampleUI: NextPage = () => {
       <div className="flex flex-col items-center justify-center h-screen">
         {countdown > 0 ? <div className="text-9xl font-bold mb-8">{`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}</div> : <div className="text-9xl font-bold mb-8">{`0:00`}</div>}
         <div className="flex space-x-4">
-          <button
-            className={`bg-opacity-75 hover:bg-opacity-100 text-white py-4 px-8 rounded-lg transition-all duration-500 ease-in-out transform ${
-              countdownStart ? "bg-gray-300" : "hover:-translate-y-2 bg-blue-500"
-            }`}
-            onClick={handleAddTenSeconds}
-            disabled={countdownStart ? true : false}
-          >
-            Add 10 seconds
-          </button>
           <button
             className={`bg-opacity-75 hover:bg-opacity-100 text-white py-4 px-8 rounded-lg transition-all duration-500 ease-in-out transform ${
               countdownStart ? "bg-gray-300" : "hover:-translate-y-2 bg-blue-500"
