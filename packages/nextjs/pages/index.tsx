@@ -1,58 +1,53 @@
 import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { EventList } from "~~/components/EventList";
+import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
+
+  const {
+    data: attempts,
+    isLoading: isLoadingAttempts,
+    error: errorReadingAttempts,
+  } = useScaffoldEventHistory({
+    contractName: "Web3Pomodoro",
+    eventName: "Attempt",
+    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+    blockData: true,
+  });
+
+  const {
+    data: success,
+    isLoading: isLoadingSuccess,
+    error: errorReadingSuccess,
+  } = useScaffoldEventHistory({
+    contractName: "Web3Pomodoro",
+    eventName: "Success",
+    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+    blockData: true,
+  });
+
   return (
     <>
       <Head>
-        <title>Scaffold-eth App</title>
+        <title>Pomodoros</title>
         <meta name="description" content="Created with 🏗 scaffold-eth" />
       </Head>
 
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">scaffold-eth 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
-          </p>
+      
+      <div className="flex justify-around align-center text-2xl w-full h-screen">
+        <div className="p-5 m-5 text-center bg-slate-700 rounded-2xl shadow-2xl">
+          <h1 className="text-[40px] text-red-400">Pomodoro Attempts</h1>
+          <EventList events={attempts} />
         </div>
-
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <SparklesIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Experiment with{" "}
-                <Link href="/example-ui" passHref className="link">
-                  Example UI
-                </Link>{" "}
-                to build your own UI.
-              </p>
-            </div>
-          </div>
+        <div className="p-5 m-5 text-center bg-slate-700 rounded-2xl shadow-2xl">
+          <h1 className="text-[40px] text-lime-400">Successful Pomodoros</h1>
+          <EventList events={success} />
         </div>
       </div>
     </>
+
   );
 };
 
